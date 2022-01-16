@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\PropertyRepository;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PropertyRepository::class)
+ * @UniqueEntity("title")
  */
 class Property
 {
@@ -15,6 +18,7 @@ class Property
         0=> "Electrique",
         1=> "Gaz"
     ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -23,6 +27,7 @@ class Property
     private $id;
 
     /**
+     * @Assert\Length(min=5)
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -34,6 +39,7 @@ class Property
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(min=10, max=400)
      */
     private $surface;
 
@@ -64,6 +70,7 @@ class Property
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Regex("/^[0-9{5}]\w+/")
      */
     private $postal_code;
 
@@ -77,7 +84,7 @@ class Property
      */
     private $created_at;
 
-    public function __construct()
+    public function  __construct()
     {
         $this->created_at = new \DateTime();
     }
